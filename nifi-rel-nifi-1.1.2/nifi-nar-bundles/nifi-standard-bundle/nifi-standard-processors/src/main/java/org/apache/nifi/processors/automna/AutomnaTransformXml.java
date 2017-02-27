@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.nifi.processors.standard;
+package org.apache.nifi.processors.automna;
 
 import java.io.File;
 import java.io.IOException;
@@ -71,7 +71,7 @@ import com.google.common.cache.LoadingCache;
 @EventDriven
 @SideEffectFree
 @SupportsBatching
-@Tags({"xml", "xslt", "transform"})
+@Tags({"xml", "xslt", "transform", "automna"})
 @InputRequirement(Requirement.INPUT_REQUIRED)
 @CapabilityDescription("Applies the provided XSLT file to the flowfile XML payload. A new FlowFile is created "
         + "with transformed content and is routed to the 'success' relationship. If the XSL transform "
