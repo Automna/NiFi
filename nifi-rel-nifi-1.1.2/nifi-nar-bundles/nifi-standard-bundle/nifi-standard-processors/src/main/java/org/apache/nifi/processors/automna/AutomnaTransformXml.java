@@ -78,7 +78,7 @@ import com.google.common.cache.LoadingCache;
         + "fails, the original FlowFile is routed to the 'failure' relationship")
 @DynamicProperty(name = "An XSLT transform parameter name", value = "An XSLT transform parameter value", supportsExpressionLanguage = true,
         description = "These XSLT parameters are passed to the transformer")
-public class TransformXml extends AbstractProcessor {
+public class AutomnaTransformXml extends AbstractProcessor {
 
     public static final PropertyDescriptor XSLT_FILE_NAME = new PropertyDescriptor.Builder()
             .name("XSLT file name")
