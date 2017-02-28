@@ -71,53 +71,33 @@ import com.google.common.cache.LoadingCache;
 @EventDriven
 @SideEffectFree
 @SupportsBatching
-@Tags({"xml", "xslt", "transform", "automna"})
+@Tags({"xml", "csv", "parser", "ericsson", "automna"})
 @InputRequirement(Requirement.INPUT_REQUIRED)
-@CapabilityDescription("Applies the provided XSLT file to the flowfile XML payload. A new FlowFile is created "
-        + "with transformed content and is routed to the 'success' relationship. If the XSL transform "
-        + "fails, the original FlowFile is routed to the 'failure' relationship")
+@CapabilityDescription("Takes Performance Management (PM) data files and converts them to a format easy to "
+        + "use with Automna Analytics or store in a database. Original flow file is sent to 'original', "
+        + "whilst the converted data is sent to 'converted'. Flowfiles that cannot be converted are send to 'failed'.")
 @DynamicProperty(name = "An XSLT transform parameter name", value = "An XSLT transform parameter value", supportsExpressionLanguage = true,
         description = "These XSLT parameters are passed to the transformer")
-public class AutomnaTransformXml extends AbstractProcessor {
+public class FileParser extends AbstractProcessor {
 
-    public static final PropertyDescriptor XSLT_FILE_NAME = new PropertyDescriptor.Builder()
-            .name("XSLT file name")
-            .description("Provides the name (including full path) of the XSLT file to apply to the flowfile XML content.")
+    public static final PropertyDescriptor VENDOR_NAME = new PropertyDescriptor.Builder()
+            .name("Vendor Name")
+            .description("Define the Vendor which generates the file (Ericsson, Nokia, etc.)")
             .required(true)
-            .expressionLanguageSupported(true)
-            .addValidator(StandardValidators.FILE_EXISTS_VALIDATOR)
+            .expressionLanguageSupported(false)
+            .allowableValues("Ericsson", "Nokia")
             .build();
 
-    public static final PropertyDescriptor INDENT_OUTPUT = new PropertyDescriptor.Builder()
-            .name("indent-output")
-            .displayName("Indent")
-            .description("Whether or not to indent the output.")
+    public static final PropertyDescriptor FILE_TYPE = new PropertyDescriptor.Builder()
+            .name("File type")
+            .description("The format of the supplied file (CSV, XML)")
             .required(true)
-            .defaultValue("true")
-            .allowableValues("true", "false")
-            .addValidator(StandardValidators.BOOLEAN_VALIDATOR)
-            .build();
-
-    public static final PropertyDescriptor CACHE_SIZE = new PropertyDescriptor.Builder()
-            .name("cache-size")
-            .displayName("Cache size")
-            .description("Maximum number of stylesheets to cache. Zero disables the cache.")
-            .required(true)
-            .defaultValue("10")
-            .addValidator(StandardValidators.NON_NEGATIVE_INTEGER_VALIDATOR)
-            .build();
-
-    public static final PropertyDescriptor CACHE_TTL_AFTER_LAST_ACCESS = new PropertyDescriptor.Builder()
-            .name("cache-ttl-after-last-access")
-            .displayName("Cache TTL after last access")
-            .description("The cache TTL (time-to-live) or how long to keep stylesheets in the cache after last access.")
-            .required(true)
-            .defaultValue("60 secs")
-            .addValidator(StandardValidators.TIME_PERIOD_VALIDATOR)
+            .defaultValue("XML")
+            .allowableValues("CSV", "XML")
             .build();
 
     public static final Relationship REL_SUCCESS = new Relationship.Builder()
-            .name("success")
+            .name("converted")
             .description("The FlowFile with transformed content will be routed to this relationship")
             .build();
 
@@ -133,10 +113,8 @@ public class AutomnaTransformXml extends AbstractProcessor {
     @Override
     protected void init(final ProcessorInitializationContext context) {
         final List<PropertyDescriptor> properties = new ArrayList<>();
-        properties.add(XSLT_FILE_NAME);
-        properties.add(INDENT_OUTPUT);
-        properties.add(CACHE_SIZE);
-        properties.add(CACHE_TTL_AFTER_LAST_ACCESS);
+        properties.add(VENDOR_NAME);
+        properties.add(FILE_TYPE);
         this.properties = Collections.unmodifiableList(properties);
 
         final Set<Relationship> relationships = new HashSet<>();
@@ -174,25 +152,25 @@ public class AutomnaTransformXml extends AbstractProcessor {
     @OnScheduled
     public void onScheduled(final ProcessContext context) {
         final ComponentLog logger = getLogger();
-        final Integer cacheSize = context.getProperty(CACHE_SIZE).asInteger();
-        final Long cacheTTL = context.getProperty(CACHE_TTL_AFTER_LAST_ACCESS).asTimePeriod(TimeUnit.SECONDS);
+        //final Integer cacheSize = context.getProperty(CACHE_SIZE).asInteger();
+        //final Long cacheTTL = context.getProperty(CACHE_TTL_AFTER_LAST_ACCESS).asTimePeriod(TimeUnit.SECONDS);
 
-        if (cacheSize > 0) {
-            CacheBuilder cacheBuilder = CacheBuilder.newBuilder().maximumSize(cacheSize);
-            if (cacheTTL > 0) {
-                cacheBuilder = cacheBuilder.expireAfterAccess(cacheTTL, TimeUnit.SECONDS);
-            }
+        //if (cacheSize > 0) {
+        //    CacheBuilder cacheBuilder = CacheBuilder.newBuilder().maximumSize(cacheSize);
+        //    if (cacheTTL > 0) {
+        //        cacheBuilder = cacheBuilder.expireAfterAccess(cacheTTL, TimeUnit.SECONDS);
+        //    }
 
-            cache = cacheBuilder.build(
-               new CacheLoader<String, Templates>() {
-                   public Templates load(String path) throws TransformerConfigurationException {
-                       return newTemplates(path);
-                   }
-               });
-        } else {
-            cache = null;
-            logger.warn("Stylesheet cache disabled because cache size is set to 0");
-        }
+        //    cache = cacheBuilder.build(
+        //       new CacheLoader<String, Templates>() {
+        //           public Templates load(String path) throws TransformerConfigurationException {
+        //               return newTemplates(path);
+        //           }
+        //       });
+        //} else {
+        //    cache = null;
+            logger.warn("AUTOMNA: OnScheduled event called for FileParser Processor. ");
+        //}
     }
 
     @Override
@@ -204,10 +182,14 @@ public class AutomnaTransformXml extends AbstractProcessor {
 
         final ComponentLog logger = getLogger();
         final StopWatch stopWatch = new StopWatch(true);
-        final String xsltFileName = context.getProperty(XSLT_FILE_NAME)
+        final String xsltFileName = context.getProperty(VENDOR_NAME)
             .evaluateAttributeExpressions(original)
             .getValue();
-        final Boolean indentOutput = context.getProperty(INDENT_OUTPUT).asBoolean();
+        final String xsltFileExtension = context.getProperty(FILE_TYPE)
+                .evaluateAttributeExpressions(original)
+                .getValue();
+        final String xsltFile = xsltFileName + "." xsltFileExtension; 
+        //final Boolean indentOutput = context.getProperty(INDENT_OUTPUT).asBoolean();
 
         try {
             FlowFile transformed = session.write(original, new StreamCallback() {
@@ -216,20 +198,20 @@ public class AutomnaTransformXml extends AbstractProcessor {
                     try (final InputStream in = new BufferedInputStream(rawIn)) {
                         final Templates templates;
                         if (cache != null) {
-                            templates = cache.get(xsltFileName);
+                            templates = cache.get(xsltFile);
                         } else {
-                            templates = newTemplates(xsltFileName);
+                            templates = newTemplates(xsltFile);
                         }
 
                         final Transformer transformer = templates.newTransformer();
-                        transformer.setOutputProperty(OutputKeys.INDENT, (indentOutput ? "yes" : "no"));
+                        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
-                        // pass all dynamic properties to the transformer
-                        for (final Map.Entry<PropertyDescriptor, String> entry : context.getProperties().entrySet()) {
-                            if (entry.getKey().isDynamic()) {
-                                String value = context.newPropertyValue(entry.getValue()).evaluateAttributeExpressions(original).getValue();
-                                transformer.setParameter(entry.getKey().getName(), value);
-                            }
+                        pass all dynamic properties to the transformer
+                        //for (final Map.Entry<PropertyDescriptor, String> entry : context.getProperties().entrySet()) {
+                        //    if (entry.getKey().isDynamic()) {
+                        //        String value = context.newPropertyValue(entry.getValue()).evaluateAttributeExpressions(original).getValue();
+                        //        transformer.setParameter(entry.getKey().getName(), value);
+                        //    }
                         }
 
                         // use a StreamSource with Saxon

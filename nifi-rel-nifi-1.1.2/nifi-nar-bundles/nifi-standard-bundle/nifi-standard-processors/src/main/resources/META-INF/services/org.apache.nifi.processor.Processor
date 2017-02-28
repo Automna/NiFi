@@ -94,4 +94,4 @@ org.apache.nifi.processors.standard.FetchDistributedMapCache
 org.apache.nifi.processors.standard.ListFTP
 org.apache.nifi.processors.standard.FetchFTP
 # Automna Processors
-org.apache.nifi.processors.automna.AutomnaTransformXml
+org.apache.nifi.processors.automna.FileParser
