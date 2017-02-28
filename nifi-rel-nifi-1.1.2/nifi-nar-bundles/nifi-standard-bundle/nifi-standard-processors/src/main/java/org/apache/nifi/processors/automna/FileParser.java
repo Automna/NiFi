@@ -71,7 +71,7 @@ import com.google.common.cache.LoadingCache;
 @EventDriven
 @SideEffectFree
 @SupportsBatching
-@Tags({"xml", "csv", "parser", "ericsson", "automna"})
+@Tags({"validator", "ericsson", "automna"})
 @InputRequirement(Requirement.INPUT_REQUIRED)
 @CapabilityDescription("Takes Performance Management (PM) data files and converts them to a format easy to "
         + "use with Automna Analytics or store in a database. Original flow file is sent to 'original', "
@@ -109,7 +109,68 @@ public class FileParser extends AbstractProcessor {
     private List<PropertyDescriptor> properties;
     private Set<Relationship> relationships;
     private LoadingCache<String, Templates> cache;
-
+    
+    /* XSLT for transformations
+     * One per Vendor/Format 
+     */
+    private String xsltFile = "";
+    /*
+     * Ericsson, XML
+     */
+    private String ERICSSON_XML = "<xsl:stylesheet version="3.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:output method="text"/>
+    <xsl:template match="/mdc">
+        <xsl:variable name="quoteString">"</xsl:variable>
+        <xsl:variable name="delimiter"> </xsl:variable>
+        <xsl:variable name="KV">=</xsl:variable>
+        
+        <xsl:variable name="startTime"><xsl:value-of select="mfh/cbt"/></xsl:variable>
+        <xsl:variable name="endTime"><xsl:value-of select="mff/ts"/></xsl:variable>
+        
+        <xsl:for-each select="md">
+            <xsl:for-each select="./mi/mv/moid">
+        
+                <xsl:text>StartDateTime=</xsl:text>
+                <xsl:value-of select="$startTime"/>
+                <xsl:value-of select="$delimiter"/>
+                <xsl:text> </xsl:text>
+                
+                <xsl:text>EndDateTime=</xsl:text>
+                <xsl:value-of select="$endTime"/>
+                <xsl:value-of select="$delimiter"/>
+                <xsl:text> </xsl:text>
+                
+                <xsl:text>SwVersion=</xsl:text>
+                <xsl:value-of select="../../../neid/nesw"/>
+                <xsl:value-of select="$delimiter"/>
+                <xsl:text> </xsl:text>
+                                
+                <xsl:text>Node=</xsl:text>
+                <xsl:value-of select="../../../neid/neun"/>
+                <xsl:value-of select="$delimiter"/>
+                
+                <xsl:variable name="mv_index" select="position()" />
+                
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="translate(.,',',' ')" />
+                
+                <xsl:text> GP=</xsl:text>
+                <xsl:value-of select="../../../mi/gp"/>
+                
+                <xsl:for-each select="../../mt">
+                    <xsl:variable name="index" select="position()" />
+                    <xsl:text> </xsl:text>
+                    <xsl:value-of select="."/>
+                    <xsl:value-of select="$KV"/>
+                    <xsl:value-of select="parent::mi/mv[$mv_index]/r[$index]" />
+                </xsl:for-each>
+                <xsl:text>&#xa;</xsl:text>
+            </xsl:for-each>
+        </xsl:for-each>
+    </xsl:template>
+</xsl:stylesheet>
+";
+        
     @Override
     protected void init(final ProcessorInitializationContext context) {
         final List<PropertyDescriptor> properties = new ArrayList<>();
@@ -182,13 +243,21 @@ public class FileParser extends AbstractProcessor {
 
         final ComponentLog logger = getLogger();
         final StopWatch stopWatch = new StopWatch(true);
-        final String xsltFileName = context.getProperty(VENDOR_NAME)
+        final String xsltVendor = context.getProperty(VENDOR_NAME)
             .evaluateAttributeExpressions(original)
             .getValue();
-        final String xsltFileExtension = context.getProperty(FILE_TYPE)
+        final String xsltFileType = context.getProperty(FILE_TYPE)
                 .evaluateAttributeExpressions(original)
                 .getValue();
-        final String xsltFile = xsltFileName + "." + xsltFileExtension; 
+        if (xsltVendor == "Ericsson")
+        {
+        	if (xsltFileType == "XML")
+        	{
+        		xsltFile = ERICSSON_XML;
+        	}
+        }
+        
+        //final String xsltFile = xsltFileName + "." + xsltFileExtension; 
         //final Boolean indentOutput = context.getProperty(INDENT_OUTPUT).asBoolean();
 
         try {
