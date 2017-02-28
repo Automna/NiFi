@@ -188,7 +188,7 @@ public class FileParser extends AbstractProcessor {
         final String xsltFileExtension = context.getProperty(FILE_TYPE)
                 .evaluateAttributeExpressions(original)
                 .getValue();
-        final String xsltFile = xsltFileName + "." xsltFileExtension; 
+        final String xsltFile = xsltFileName + "." + xsltFileExtension; 
         //final Boolean indentOutput = context.getProperty(INDENT_OUTPUT).asBoolean();
 
         try {
@@ -206,13 +206,13 @@ public class FileParser extends AbstractProcessor {
                         final Transformer transformer = templates.newTransformer();
                         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
-                        pass all dynamic properties to the transformer
+                        //pass all dynamic properties to the transformer
                         //for (final Map.Entry<PropertyDescriptor, String> entry : context.getProperties().entrySet()) {
                         //    if (entry.getKey().isDynamic()) {
                         //        String value = context.newPropertyValue(entry.getValue()).evaluateAttributeExpressions(original).getValue();
                         //        transformer.setParameter(entry.getKey().getName(), value);
                         //    }
-                        }
+                        //}
 
                         // use a StreamSource with Saxon
                         StreamSource source = new StreamSource(in);
