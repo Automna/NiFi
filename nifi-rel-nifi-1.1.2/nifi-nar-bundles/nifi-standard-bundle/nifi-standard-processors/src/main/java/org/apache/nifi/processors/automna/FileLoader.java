@@ -189,7 +189,7 @@ public class FileLoader extends AbstractProcessor {
                     try (final InputStream in = new BufferedInputStream(rawIn)) {
                         StreamSource source = new StreamSource(in);
                         StreamResult result = new StreamResult(out);
-                        transformer.transform(source, result);
+                        //transformer.transform(source, result);
                     } catch (final Exception e) {
                         throw new IOException(e);
                     }
