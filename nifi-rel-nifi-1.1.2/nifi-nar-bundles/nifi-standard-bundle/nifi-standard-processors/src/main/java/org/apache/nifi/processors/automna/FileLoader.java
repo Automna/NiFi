@@ -112,8 +112,8 @@ public class FileLoader extends AbstractProcessor {
     @Override
     protected void init(final ProcessorInitializationContext context) {
         final List<PropertyDescriptor> properties = new ArrayList<>();
-        properties.add(VENDOR_NAME);
-        properties.add(FILE_TYPE);
+        properties.add(CONSUMER);
+        properties.add(IP_ADDRESS);
         this.properties = Collections.unmodifiableList(properties);
 
         final Set<Relationship> relationships = new HashSet<>();

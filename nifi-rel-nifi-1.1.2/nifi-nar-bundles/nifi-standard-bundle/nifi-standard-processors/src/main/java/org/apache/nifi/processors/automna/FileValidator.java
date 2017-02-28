@@ -78,7 +78,7 @@ import com.google.common.cache.LoadingCache;
         + "whilst the converted data is sent to 'converted'. Flowfiles that cannot be converted are send to 'failed'.")
 @DynamicProperty(name = "An XSLT transform parameter name", value = "An XSLT transform parameter value", supportsExpressionLanguage = true,
         description = "These XSLT parameters are passed to the transformer")
-public class FileParser extends AbstractProcessor {
+public class FileValidator extends AbstractProcessor {
 
     public static final PropertyDescriptor VENDOR_NAME = new PropertyDescriptor.Builder()
             .name("Vendor Name")
