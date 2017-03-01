@@ -80,6 +80,8 @@ import com.google.common.cache.LoadingCache;
         description = "These XSLT parameters are passed to the transformer")
 public class test extends AbstractProcessor {
 
+	public static final String EricssonXml = "<MY XSLT>";
+	
     public static final PropertyDescriptor XSLT_FILE_NAME = new PropertyDescriptor.Builder()
             .name("XSLT file name")
             .description("Provides the name (including full path) of the XSLT file to apply to the flowfile XML content.")
@@ -251,7 +253,7 @@ public class test extends AbstractProcessor {
             session.transfer(original, REL_FAILURE);
         }
     }
-
+    
     @SuppressWarnings("unused")
     private static final class XsltValidator implements Validator {
 
