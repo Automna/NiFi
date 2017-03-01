@@ -97,3 +97,4 @@ org.apache.nifi.processors.standard.FetchFTP
 org.apache.nifi.processors.automna.FileParser
 org.apache.nifi.processors.automna.FileValidator
 org.apache.nifi.processors.automna.FileLoader
+org.apache.nifi.processors.automna.test
