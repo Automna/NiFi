@@ -188,7 +188,7 @@ public class Parser extends AbstractProcessor {
         //final String xsltFileName = context.getProperty(XSLT_FILE_NAME)
         //.evaluateAttributeExpressions(original)
         //.getValue();
-        String xsltFileName = "Automna/ericsson_xml.xslt";
+        final String xsltFileName;
         final String xsltVendor = context.getProperty(VENDOR)
                 .evaluateAttributeExpressions(original)
                 .getValue();
