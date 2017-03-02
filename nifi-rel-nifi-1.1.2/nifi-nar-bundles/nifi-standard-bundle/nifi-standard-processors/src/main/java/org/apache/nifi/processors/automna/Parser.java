@@ -189,6 +189,20 @@ public class Parser extends AbstractProcessor {
         //.getValue();
         final String xsltFileName = "Automna/ericsson_xml.xslt";
             
+        if (xsltVendor == "Ericsson")
+        {
+        	if (xsltFileType == "XML")
+        	{
+        		xsltFileName = "Automna/ericsson_xml.xslt";
+        	}
+        }
+        if (xsltVendor == "Nokia")
+        {
+        	if (xsltFileType == "XML")
+        	{
+        		xsltFileName = "Automna/nokia_xml.xslt";
+        	}
+        }
         try {
             FlowFile transformed = session.write(original, new StreamCallback() {
                 @Override

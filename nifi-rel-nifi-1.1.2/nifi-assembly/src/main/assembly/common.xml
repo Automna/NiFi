@@ -121,6 +121,13 @@
             <filtered>true</filtered>
         </file>
         <file>
+            <source>./nokia_xml.xslt</source>
+            <outputDirectory>./Automna</outputDirectory>
+            <destName>nokia_xml.xslt</destName>
+            <fileMode>0644</fileMode>
+            <filtered>true</filtered>
+        </file>
+        <file>
             <source>./MeasDataCollection.dtd</source>
             <outputDirectory>./Automna</outputDirectory>
             <destName>MeasDataCollection.dtd</destName>
