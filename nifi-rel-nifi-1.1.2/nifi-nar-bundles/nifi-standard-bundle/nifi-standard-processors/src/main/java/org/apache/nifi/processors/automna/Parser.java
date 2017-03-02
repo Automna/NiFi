@@ -200,7 +200,7 @@ public class Parser extends AbstractProcessor {
         {
         	xsltFileName = "Automna/ericsson_xml.xslt";
         } 
-        else if (xsltVendor == "NOKIA" && "XML")
+        else if (xsltVendor == "NOKIA" && xsltFileType == "XML")
     	{
         		xsltFileName = "Automna/nokia_xml.xslt";
     	}
