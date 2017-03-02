@@ -1,0 +1,23 @@
+<!-- MeasDataCollection.dtd version 1.1-->
+<!ELEMENT mdc (mfh , md*, mff )>
+<!ELEMENT mfh (ffv, sn, st, vn, cbt) >
+<!ELEMENT md (neid , mi*)>
+<!ELEMENT neid (neun, nedn)>
+<!ELEMENT mi (mts,gp, mt*, mv*)>
+<!ELEMENT mv (moid , r*, sf? )>
+<!ELEMENT mff (ts)>
+<!ELEMENT ts (#PCDATA)>
+<!ELEMENT sf (#PCDATA)>
+<!ELEMENT r (#PCDATA)>
+<!ELEMENT mt (#PCDATA)>
+<!ELEMENT moid (#PCDATA)>
+<!ELEMENT gp (#PCDATA)>
+<!ELEMENT mts (#PCDATA)>
+<!ELEMENT nedn (#PCDATA)>
+<!ELEMENT neun (#PCDATA)>
+<!ELEMENT cbt (#PCDATA)>
+<!ELEMENT vn (#PCDATA)>
+<!ELEMENT st (#PCDATA)>
+<!ELEMENT sn (#PCDATA)>
+<!ELEMENT ffv (#PCDATA)>
+<!-- end of MeasDataCollection.dtd -->
