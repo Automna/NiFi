@@ -113,5 +113,12 @@
             <fileMode>0644</fileMode>
             <filtered>true</filtered>
         </file>
+        <file>
+            <source>./ericsson_xml.xslt</source>
+            <outputDirectory>./</outputDirectory>
+            <destName>ericsson_xml.xslt</destName>
+            <fileMode>0644</fileMode>
+            <filtered>true</filtered>
+        </file>
     </files>
 </component>
