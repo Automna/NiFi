@@ -208,7 +208,7 @@ public class Parser extends AbstractProcessor {
     	}
         else
     	{
-        	final String xsltFileName = "Automna/ericsson_xml.xslt";
+        	xsltFileName = "Automna/ericsson_xml.xslt";
         	logger.info("AUTOMNA: Default vendor/format applied");
     	}
         
