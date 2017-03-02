@@ -193,8 +193,7 @@ public class Parser extends AbstractProcessor {
                 @Override
                 public void process(final InputStream rawIn, final OutputStream out) throws IOException {
                     try (final InputStream in = new BufferedInputStream(rawIn)) {
-                    	final String xsltFileName = "Automna/ericsson_xml.xslt";
-                        
+                    	                        
                         final String xsltVendor = context.getProperty(VENDOR)
                                 .evaluateAttributeExpressions(original)
                                 .getValue();
@@ -204,11 +203,11 @@ public class Parser extends AbstractProcessor {
                             
                         if (xsltVendor == "ERICSSON" && xsltFileType == "XML")
                         {
-                        	xsltFileName = "Automna/ericsson_xml.xslt";
+                        	final String xsltFileName = "Automna/ericsson_xml.xslt";
                         } 
                         else if (xsltVendor == "NOKIA" && xsltFileType == "XML")
                     	{
-                        		xsltFileName = "Automna/nokia_xml.xslt";
+                        	final String xsltFileName = "Automna/nokia_xml.xslt";
                     	}
                         final Templates templates;
                         if (cache != null) {
