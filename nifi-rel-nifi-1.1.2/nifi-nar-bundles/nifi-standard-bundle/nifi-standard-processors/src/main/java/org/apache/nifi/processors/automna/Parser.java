@@ -89,7 +89,7 @@ public class Parser extends AbstractProcessor {
             .description("The Equipment Vendor for the file being parsed")
             .required(true)
             .expressionLanguageSupported(false)
-            .allowableValues("Ericsson", "Nokia")
+            .allowableValues("ERICSSON", "NOKIA")
             .build();
 
     public static final PropertyDescriptor FORMAT = new PropertyDescriptor.Builder()
@@ -196,20 +196,15 @@ public class Parser extends AbstractProcessor {
                     .evaluateAttributeExpressions(original)
                     .getValue();
             
-        if (xsltVendor == "Ericsson")
+        if (xsltVendor == "ERICSSON" && xsltFileType == "XML")
         {
-        	if (xsltFileType == "XML")
-        	{
-        		xsltFileName = "Automna/ericsson_xml.xslt";
-        	}
-        }
-        if (xsltVendor == "Nokia")
-        {
-        	if (xsltFileType == "XML")
-        	{
+        	xsltFileName = "Automna/ericsson_xml.xslt";
+        } 
+        else if (xsltVendor == "NOKIA" && "XML")
+    	{
         		xsltFileName = "Automna/nokia_xml.xslt";
-        	}
-        }
+    	}
+        
         try {
             FlowFile transformed = session.write(original, new StreamCallback() {
                 @Override
