@@ -187,29 +187,29 @@ public class Parser extends AbstractProcessor {
         //final String xsltFileName = context.getProperty(XSLT_FILE_NAME)
         //.evaluateAttributeExpressions(original)
         //.getValue();
-        final String xsltFileName = "Automna/ericsson_xml.xslt";
-        
-        final String xsltVendor = context.getProperty(VENDOR)
-                .evaluateAttributeExpressions(original)
-                .getValue();
-            final String xsltFileType = context.getProperty(FORMAT)
-                    .evaluateAttributeExpressions(original)
-                    .getValue();
-            
-        if (xsltVendor == "ERICSSON" && xsltFileType == "XML")
-        {
-        	xsltFileName = "Automna/ericsson_xml.xslt";
-        } 
-        else if (xsltVendor == "NOKIA" && xsltFileType == "XML")
-    	{
-        		xsltFileName = "Automna/nokia_xml.xslt";
-    	}
         
         try {
             FlowFile transformed = session.write(original, new StreamCallback() {
                 @Override
                 public void process(final InputStream rawIn, final OutputStream out) throws IOException {
                     try (final InputStream in = new BufferedInputStream(rawIn)) {
+                    	final String xsltFileName = "Automna/ericsson_xml.xslt";
+                        
+                        final String xsltVendor = context.getProperty(VENDOR)
+                                .evaluateAttributeExpressions(original)
+                                .getValue();
+                            final String xsltFileType = context.getProperty(FORMAT)
+                                    .evaluateAttributeExpressions(original)
+                                    .getValue();
+                            
+                        if (xsltVendor == "ERICSSON" && xsltFileType == "XML")
+                        {
+                        	xsltFileName = "Automna/ericsson_xml.xslt";
+                        } 
+                        else if (xsltVendor == "NOKIA" && xsltFileType == "XML")
+                    	{
+                        		xsltFileName = "Automna/nokia_xml.xslt";
+                    	}
                         final Templates templates;
                         if (cache != null) {
                             templates = cache.get(xsltFileName);
