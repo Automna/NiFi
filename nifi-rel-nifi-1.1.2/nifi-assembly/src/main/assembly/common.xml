@@ -115,14 +115,14 @@
         </file>
         <file>
             <source>./ericsson_xml.xslt</source>
-            <outputDirectory>./</outputDirectory>
+            <outputDirectory>./Automna</outputDirectory>
             <destName>ericsson_xml.xslt</destName>
             <fileMode>0644</fileMode>
             <filtered>true</filtered>
         </file>
         <file>
             <source>./MeasDataCollection.dtd</source>
-            <outputDirectory>./</outputDirectory>
+            <outputDirectory>./Automna</outputDirectory>
             <destName>MeasDataCollection.dtd</destName>
             <fileMode>0644</fileMode>
             <filtered>true</filtered>
