@@ -194,24 +194,8 @@ public class Parser extends AbstractProcessor {
         final String xsltFileType = context.getProperty(FORMAT)
                     .evaluateAttributeExpressions(original)
                     .getValue();
-        String xsltFileName = "";
-        logger.info(xsltVendor + xsltFileType);
-        if (xsltVendor == "ERICSSON" && xsltFileType == "XML")
-        {
-        	xsltFileName = "Automna/ericsson_xml.xslt";
-        	logger.info(xsltFileName);
-        } 
-        else if (xsltVendor == "NOKIA" && xsltFileType == "XML")
-    	{
-        	xsltFileName = "Automna/nokia_xml.xslt";
-        	logger.info(xsltFileName);
-    	}
-        else
-    	{
-        	xsltFileName = "Automna/ericsson_xml.xslt";
-        	logger.info("AUTOMNA: Default vendor/format applied");
-    	}
-        
+        final String xsltFileName = VENDOR + "_" + FORMAT + ".xslt";
+                
         try {
             FlowFile transformed = session.write(original, new StreamCallback() {
                 @Override

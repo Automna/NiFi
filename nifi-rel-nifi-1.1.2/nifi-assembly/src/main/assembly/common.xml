@@ -114,16 +114,16 @@
             <filtered>true</filtered>
         </file>
         <file>
-            <source>./ericsson_xml.xslt</source>
+            <source>./ERICSSON_XML.xslt</source>
             <outputDirectory>./Automna</outputDirectory>
-            <destName>ericsson_xml.xslt</destName>
+            <destName>ERICSSON_XML.xslt</destName>
             <fileMode>0644</fileMode>
             <filtered>true</filtered>
         </file>
         <file>
-            <source>./nokia_xml.xslt</source>
+            <source>./NOKIA_XML.xslt</source>
             <outputDirectory>./Automna</outputDirectory>
-            <destName>nokia_xml.xslt</destName>
+            <destName>NOKIA_XML.xslt</destName>
             <fileMode>0644</fileMode>
             <filtered>true</filtered>
         </file>
