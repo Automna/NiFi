@@ -194,7 +194,7 @@ public class Parser extends AbstractProcessor {
         final String xsltFileType = context.getProperty(FORMAT)
                     .evaluateAttributeExpressions(original)
                     .getValue();
-        final String xsltFileName = VENDOR + "_" + FORMAT + ".xslt";
+        final String xsltFileName = xsltVendor + "_" + xsltFileType + ".xslt";
                 
         try {
             FlowFile transformed = session.write(original, new StreamCallback() {
