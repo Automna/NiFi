@@ -194,15 +194,16 @@ public class Parser extends AbstractProcessor {
         final String xsltFileType = context.getProperty(FORMAT)
                     .evaluateAttributeExpressions(original)
                     .getValue();
+        String xsltFileName = "";
         logger.info(xsltVendor + xsltFileType);
         if (xsltVendor == "ERICSSON" && xsltFileType == "XML")
         {
-        	final String xsltFileName = "Automna/ericsson_xml.xslt";
+        	xsltFileName = "Automna/ericsson_xml.xslt";
         	logger.info(xsltFileName);
         } 
         else if (xsltVendor == "NOKIA" && xsltFileType == "XML")
     	{
-        	final String xsltFileName = "Automna/nokia_xml.xslt";
+        	xsltFileName = "Automna/nokia_xml.xslt";
         	logger.info(xsltFileName);
     	}
         else
