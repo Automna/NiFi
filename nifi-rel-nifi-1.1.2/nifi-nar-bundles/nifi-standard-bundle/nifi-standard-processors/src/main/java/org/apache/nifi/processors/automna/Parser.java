@@ -159,7 +159,7 @@ public class Parser extends AbstractProcessor {
 
         if (CACHE_SIZE > 0) {
             CacheBuilder cacheBuilder = CacheBuilder.newBuilder().maximumSize(CACHE_SIZE);
-            if (cacheTTL > 0) {
+            if (CACHE_TTL_AFTER_LAST_ACCESS > 0) {
                 cacheBuilder = cacheBuilder.expireAfterAccess(CACHE_TTL_AFTER_LAST_ACCESS, TimeUnit.SECONDS);
             }
 
