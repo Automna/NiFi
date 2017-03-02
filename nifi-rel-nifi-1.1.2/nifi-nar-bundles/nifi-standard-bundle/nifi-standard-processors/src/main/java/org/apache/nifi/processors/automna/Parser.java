@@ -113,8 +113,7 @@ public class Parser extends AbstractProcessor {
     private List<PropertyDescriptor> properties;
     private Set<Relationship> relationships;
     private LoadingCache<String, Templates> cache;
-    private String xsltFileName;
-
+    
     @Override
     protected void init(final ProcessorInitializationContext context) {
         final List<PropertyDescriptor> properties = new ArrayList<>();
@@ -188,6 +187,7 @@ public class Parser extends AbstractProcessor {
         //final String xsltFileName = context.getProperty(XSLT_FILE_NAME)
         //.evaluateAttributeExpressions(original)
         //.getValue();
+        final String xsltFileName = "Automna/ericsson_xml.xslt";
         
         final String xsltVendor = context.getProperty(VENDOR)
                 .evaluateAttributeExpressions(original)
