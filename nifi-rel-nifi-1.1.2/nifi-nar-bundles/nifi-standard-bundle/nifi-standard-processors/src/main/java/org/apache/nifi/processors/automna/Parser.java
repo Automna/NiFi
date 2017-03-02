@@ -82,7 +82,7 @@ public class Parser extends AbstractProcessor {
 	
 	public static final Boolean INDENT_OUTPUT = true;
 	public static final Integer CACHE_SIZE = 10;
-	public static final Long CACHE_TTL_AFTER_LAST_ACCESS = 60; // in seconds
+	public static final Long CACHE_TTL_AFTER_LAST_ACCESS = 60L; // in seconds
 	
     public static final PropertyDescriptor VENDOR = new PropertyDescriptor.Builder()
             .name("Vendor")
