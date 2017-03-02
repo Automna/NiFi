@@ -113,6 +113,7 @@ public class Parser extends AbstractProcessor {
     private List<PropertyDescriptor> properties;
     private Set<Relationship> relationships;
     private LoadingCache<String, Templates> cache;
+    private String xsltFileName;
 
     @Override
     protected void init(final ProcessorInitializationContext context) {
