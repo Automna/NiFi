@@ -194,24 +194,29 @@ public class Parser extends AbstractProcessor {
         final String xsltFileType = context.getProperty(FORMAT)
                     .evaluateAttributeExpressions(original)
                     .getValue();
-                
+        logger.info(xsltVendor + xsltFileType);
+        if (xsltVendor == "ERICSSON" && xsltFileType == "XML")
+        {
+        	final String xsltFileName = "Automna/ericsson_xml.xslt";
+        	logger.info(xsltFileName);
+        } 
+        else if (xsltVendor == "NOKIA" && xsltFileType == "XML")
+    	{
+        	final String xsltFileName = "Automna/nokia_xml.xslt";
+        	logger.info(xsltFileName);
+    	}
+        else
+    	{
+        	final String xsltFileName = "Automna/ericsson_xml.xslt";
+        	logger.info("AUTOMNA: Default vendor/format applied");
+    	}
+        
         try {
             FlowFile transformed = session.write(original, new StreamCallback() {
                 @Override
                 public void process(final InputStream rawIn, final OutputStream out) throws IOException {
                     try (final InputStream in = new BufferedInputStream(rawIn)) {
-                    	                        
-                    	logger.info(xsltVendor + xsltFileType);
-                        if (xsltVendor == "ERICSSON" && xsltFileType == "XML")
-                        {
-                        	final String xsltFileName = "Automna/ericsson_xml.xslt";
-                        	logger.info(xsltFileName);
-                        } 
-                        else if (xsltVendor == "NOKIA" && xsltFileType == "XML")
-                    	{
-                        	final String xsltFileName = "Automna/nokia_xml.xslt";
-                        	logger.info(xsltFileName);
-                    	}
+                    	
                         final Templates templates;
                         if (cache != null) {
                             templates = cache.get(xsltFileName);
