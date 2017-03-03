@@ -114,9 +114,9 @@
             <filtered>true</filtered>
         </file>
         <file>
-            <source>./ERICSSON_XML.xslt</source>
+            <source>./ERICSSON_L14A_XML.xslt</source>
             <outputDirectory>./Automna</outputDirectory>
-            <destName>ERICSSON_XML.xslt</destName>
+            <destName>ERICSSON_L14A_XML.xslt</destName>
             <fileMode>0644</fileMode>
             <filtered>true</filtered>
         </file>

@@ -71,9 +71,9 @@ import com.google.common.cache.LoadingCache;
 @EventDriven
 @SideEffectFree
 @SupportsBatching
-@Tags({"parser", "automna"})
+@Tags({"ran", "eNB", "parser", "automna"})
 @InputRequirement(Requirement.INPUT_REQUIRED)
-@CapabilityDescription("Converts PM Files from an Equipment Vendor into Automna friendly format. "
+@CapabilityDescription("Converts eNB PM Files from an Equipment Vendor into Automna friendly format. "
         + "Transformed content is routed to the 'success' relationship after successful conversion. If the transform "
         + "fails, the original FlowFile is routed to the 'failure' relationship")
 @DynamicProperty(name = "An XSLT transform parameter name", value = "An XSLT transform parameter value", supportsExpressionLanguage = true,
@@ -89,7 +89,15 @@ public class Parser extends AbstractProcessor {
             .description("The Equipment Vendor for the file being parsed")
             .required(true)
             .expressionLanguageSupported(false)
-            .allowableValues("ERICSSON", "NOKIA")
+            .allowableValues("ERICSSON")
+            .build();
+    
+    public static final PropertyDescriptor RELEASE = new PropertyDescriptor.Builder()
+            .name("Release")
+            .displayName("Release")
+            .description("The software release of the Vendors eNB.")
+            .required(true)
+            .allowableValues("L14A")
             .build();
 
     public static final PropertyDescriptor FORMAT = new PropertyDescriptor.Builder()
@@ -97,7 +105,7 @@ public class Parser extends AbstractProcessor {
             .displayName("File Format")
             .description("The format of the source file.")
             .required(true)
-            .allowableValues("XML", "CSV")
+            .allowableValues("XML")
             .build();
 
     public static final Relationship REL_SUCCESS = new Relationship.Builder()
@@ -118,6 +126,7 @@ public class Parser extends AbstractProcessor {
     protected void init(final ProcessorInitializationContext context) {
         final List<PropertyDescriptor> properties = new ArrayList<>();
         properties.add(VENDOR);
+        properties.add(RELEASE);
         properties.add(FORMAT);
         this.properties = Collections.unmodifiableList(properties);
 
@@ -194,7 +203,10 @@ public class Parser extends AbstractProcessor {
         final String xsltFileType = context.getProperty(FORMAT)
                     .evaluateAttributeExpressions(original)
                     .getValue();
-        final String xsltFileName = "Automna/" + xsltVendor + "_" + xsltFileType + ".xslt";
+        final String xsltRelease = context.getProperty(RELEASE)
+                .evaluateAttributeExpressions(original)
+                .getValue();
+        final String xsltFileName = "Automna/" + xsltVendor + "_" +xsltRelease + "_" + xsltFileType + ".xslt";
                 
         try {
             FlowFile transformed = session.write(original, new StreamCallback() {

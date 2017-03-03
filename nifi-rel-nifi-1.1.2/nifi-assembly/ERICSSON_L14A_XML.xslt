@@ -11,7 +11,7 @@
         <xsl:for-each select="md">
             <xsl:for-each select="./mi/mv/moid">
         
-        		<xsl:text>Vendor=EricssonXML</xsl:text>
+        		<xsl:text>Vendor=Ericsson-L14A.XML</xsl:text>
                 <xsl:value-of select="$delimiter"/>
                 <xsl:text> </xsl:text>
                 
