@@ -121,6 +121,13 @@
             <filtered>true</filtered>
         </file>
         <file>
+            <source>./ERICSSON_L14A_MAPPING.txt</source>
+            <outputDirectory>./Automna</outputDirectory>
+            <destName>ERICSSON_L14A_MAPPING.txt</destName>
+            <fileMode>0644</fileMode>
+            <filtered>true</filtered>
+        </file>
+        <file>
             <source>./NOKIA_XML.xslt</source>
             <outputDirectory>./Automna</outputDirectory>
             <destName>NOKIA_XML.xslt</destName>
